@@ -1,0 +1,23 @@
+connector:
+  name: "nfp_ref_connector"
+  service: "azure_sql_db"
+  config:
+    host: "{{PLACEHOLDER_REF_HOST}}"
+    port: 1433
+    database: "REF"
+    user: "FIVETRAN_USER_NFP"
+    password: "{{PLACEHOLDER_SOURCE_DB_PWD}}"
+    update_method: "TELEPORT" # Log-based CDC
+  destination:
+    service: "snowflake"
+    account: "{{PLACEHOLDER_SNOWFLAKE_ACCOUNT}}"
+    database: "NFP_BRONZE"
+    schema: "BRONZE_REF"
+  sync_frequency: "1440" # Minutes
+  schemas:
+    - name: "REF"
+      tables:
+        - name: "AIRPORT_FEES"
+          enabled: true
+        - name: "AIRCRAFT_COST_RATE"
+          enabled: true
