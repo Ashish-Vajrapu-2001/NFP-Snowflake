@@ -1,0 +1,23 @@
+connector:
+  name: "nfp_amos_connector"
+  service: "sql_server"
+  config:
+    host: "{{PLACEHOLDER_AMOS_HOST}}"
+    port: 1433
+    database: "AMOS"
+    user: "FIVETRAN_USER_NFP"
+    password: "{{PLACEHOLDER_SOURCE_DB_PWD}}"
+    update_method: "TELEPORT" # Log-based CDC
+  destination:
+    service: "snowflake"
+    account: "{{PLACEHOLDER_SNOWFLAKE_ACCOUNT}}"
+    database: "NFP_BRONZE"
+    schema: "BRONZE_AMOS"
+  sync_frequency: "1440" # Minutes
+  schemas:
+    - name: "AMOS"
+      tables:
+        - name: "AIRCRAFT_FLEET"
+          enabled: true
+        - name: "WORK_ORDER"
+          enabled: true
