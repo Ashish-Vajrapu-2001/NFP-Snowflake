@@ -1,0 +1,25 @@
+connector:
+  name: "nfp_epicor_connector"
+  service: "sql_server"
+  config:
+    host: "{{PLACEHOLDER_EPICOR_HOST}}"
+    port: 1433
+    database: "EPICOR"
+    user: "FIVETRAN_USER_NFP"
+    password: "{{PLACEHOLDER_SOURCE_DB_PWD}}"
+    update_method: "NATIVE_UPDATE" # Log-based CDC
+  destination:
+    service: "snowflake"
+    account: "{{PLACEHOLDER_SNOWFLAKE_ACCOUNT}}"
+    database: "NFP_BRONZE"
+    schema: "BRONZE_EPICOR"
+  sync_frequency: "15" # Minutes
+  schemas:
+    - name: "EPICOR"
+      tables:
+        - name: "GL_JOURNAL_ENTRY"
+          enabled: true
+        - name: "FUEL_INVOICE"
+          enabled: true
+        - name: "FLIGHT_COST_ALLOCATION"
+          enabled: true
