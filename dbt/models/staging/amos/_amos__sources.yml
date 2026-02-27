@@ -1,0 +1,40 @@
+version: 2
+sources:
+  - name: bronze_amos
+    database: "{{ env_var('DBT_BRONZE_DB', 'NFP_BRONZE') }}"
+    schema: BRONZE_AMOS
+    config:
+      loaded_at_field: _FIVETRAN_SYNCED
+      freshness:
+        warn_after: {count: 26, period: hour}
+        error_after: {count: 30, period: hour}
+    tables:
+      - name: WORK_ORDER
+        description: "Maintenance work orders"
+        columns:
+          - name: WO_NUMBER
+            description: "Unique work order number"
+          - name: AIRCRAFT_REG
+            description: "Aircraft registration"
+          - name: TOTAL_COST
+            description: "Total cost"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
+
+      - name: AIRCRAFT_FLEET
+        description: "Aircraft fleet master"
+        columns:
+          - name: AIRCRAFT_REG
+            description: "Aircraft registration"
+          - name: AIRCRAFT_TYPE
+            description: "Aircraft type"
+          - name: FUEL_BURN_RATE
+            description: "Fuel burn rate"
+          - name: MAINT_RESERVE_RATE
+            description: "Maintenance reserve rate"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
