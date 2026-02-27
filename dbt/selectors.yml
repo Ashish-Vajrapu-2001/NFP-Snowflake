@@ -1,0 +1,24 @@
+selectors:
+  - name: silver_incremental
+    description: "All Silver incremental staging models"
+    definition:
+      method: config.materialized
+      value: incremental
+      exclude:
+        - method: resource_type
+          value: snapshot
+
+  - name: silver_snapshots
+    description: "All Silver SCD2 snapshots"
+    definition:
+      method: resource_type
+      value: snapshot
+
+  - name: silver_all
+    description: "All Silver models and snapshots"
+    definition:
+      union:
+        - method: tag
+          value: silver
+        - method: resource_type
+          value: snapshot
