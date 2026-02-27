@@ -1,0 +1,21 @@
+connector:
+  name: "nfp_champ_connector"
+  service: "sftp"
+  config:
+    host: "{{PLACEHOLDER_CHAMP_HOST}}"
+    port: 22
+    database: "CHAMP"
+    user: "FIVETRAN_USER_NFP"
+    password: "{{PLACEHOLDER_SOURCE_DB_PWD}}"
+    update_method: "FILE_BASED" # Log-based CDC
+  destination:
+    service: "snowflake"
+    account: "{{PLACEHOLDER_SNOWFLAKE_ACCOUNT}}"
+    database: "NFP_BRONZE"
+    schema: "BRONZE_CHAMP"
+  sync_frequency: "1440" # Minutes
+  schemas:
+    - name: "CHAMP"
+      tables:
+        - name: "AIR_WAYBILL"
+          enabled: true
