@@ -1,0 +1,104 @@
+version: 2
+sources:
+  - name: bronze_aims
+    database: "{{ env_var('DBT_BRONZE_DB', 'NFP_BRONZE') }}"
+    schema: BRONZE_AIMS
+    config:
+      loaded_at_field: _FIVETRAN_SYNCED
+      freshness:
+        warn_after: {count: 1, period: hour}
+        error_after: {count: 4, period: hour}
+    tables:
+      - name: FLIGHT_LEG
+        description: "Operational flight data from AIMS"
+        columns:
+          - name: FLIGHT_ID
+            description: "Unique system-generated flight leg identifier"
+          - name: FLIGHT_NUMBER
+            description: "IATA flight number"
+          - name: FLIGHT_DATE
+            description: "Scheduled departure date"
+          - name: SERVICE_TYPE
+            description: "Service classification"
+          - name: ORIGIN
+            description: "Departure airport code"
+          - name: DESTINATION
+            description: "Arrival airport code"
+          - name: SCHEDULED_DEP
+            description: "Scheduled departure datetime"
+          - name: SCHEDULED_ARR
+            description: "Scheduled arrival datetime"
+          - name: ACTUAL_DEP
+            description: "Actual departure datetime"
+          - name: ACTUAL_ARR
+            description: "Actual arrival datetime"
+          - name: AIRCRAFT_REG
+            description: "Aircraft registration"
+          - name: AIRCRAFT_TYPE
+            description: "Aircraft type code"
+          - name: BLOCK_HOURS
+            description: "Block hours"
+          - name: FLIGHT_HOURS
+            description: "Airborne flight hours"
+          - name: DISTANCE_KM
+            description: "Great circle distance in km"
+          - name: SEAT_CAPACITY
+            description: "Total seats configured"
+          - name: PAX_BOOKED
+            description: "Number of passengers booked"
+          - name: PAX_BOARDED
+            description: "Number of passengers boarded"
+          - name: LOAD_FACTOR
+            description: "Passenger load factor"
+          - name: CARGO_CAPACITY_KG
+            description: "Max belly cargo capacity"
+          - name: CARGO_BOOKED_KG
+            description: "Cargo weight booked"
+          - name: CARGO_LOADED_KG
+            description: "Actual cargo loaded"
+          - name: FLIGHT_STATUS
+            description: "Operational status"
+          - name: CANCELLED_FLAG
+            description: "Cancellation indicator"
+          - name: DIVERTED_FLAG
+            description: "Diversion indicator"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
+
+      - name: CREW_ASSIGNMENT
+        description: "Crew duty assignments"
+        columns:
+          - name: ASSIGNMENT_ID
+            description: "Unique assignment identifier"
+          - name: FLIGHT_ID
+            description: "Foreign key to FLIGHT_LEG"
+          - name: EMPLOYEE_ID
+            description: "Employee identifier"
+          - name: CREW_ROLE
+            description: "Role on flight"
+          - name: CREW_TYPE
+            description: "Flight deck or cabin"
+          - name: DUTY_START
+            description: "Duty start time"
+          - name: DUTY_END
+            description: "Duty end time"
+          - name: BLOCK_HOURS
+            description: "Block hours for assignment"
+          - name: HOURLY_RATE
+            description: "Hourly rate"
+          - name: CREW_COST
+            description: "Total crew cost"
+          - name: OVERTIME_FLAG
+            description: "Overtime indicator"
+          - name: OVERTIME_HOURS
+            description: "Overtime hours"
+          - name: PER_DIEM
+            description: "Per diem allowance"
+          - name: BASE_STATION
+            description: "Home base"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
