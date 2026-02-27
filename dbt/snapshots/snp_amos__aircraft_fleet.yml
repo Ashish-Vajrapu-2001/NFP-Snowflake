@@ -1,0 +1,24 @@
+snapshots:
+  - name: snp_amos__aircraft_fleet
+    relation: ref('ephemeral_snp_amos__aircraft_fleet')
+    config:
+      target_schema: SILVER_AMOS
+      unique_key: 'AIRCRAFT_REG'
+      strategy: timestamp
+      updated_at: _FIVETRAN_SYNCED
+      hard_deletes: new_record
+      dbt_valid_to_current: "to_date('9999-12-31')"
+    description: "SCD2 snapshot of AIRCRAFT_FLEET"
+    columns:
+      - name: dbt_scd_id
+        description: "dbt surrogate key"
+      - name: AIRCRAFT_REG
+        description: "Business key"
+      - name: dbt_valid_from
+        description: "Valid from timestamp"
+      - name: dbt_valid_to
+        description: "Valid to timestamp"
+      - name: dbt_is_current
+        description: "Is current flag"
+      - name: dbt_is_deleted
+        description: "Is deleted flag"
