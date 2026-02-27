@@ -1,0 +1,43 @@
+version: 2
+macros:
+  - name: generate_schema_name
+    description: >
+      Overrides dbt default schema name behaviour. In prod: uses custom_schema_name
+      directly. In non-prod: prefixes with target name.
+    arguments:
+      - name: custom_schema_name
+        type: string
+        description: Schema name from config
+      - name: node
+        type: node
+        description: dbt node object
+
+  - name: limit_dates_for_dev
+    description: >
+      In non-prod targets, adds a WHERE clause to limit date range scanned.
+    arguments:
+      - name: date_col
+        type: string
+        description: The date column to filter
+
+  - name: email_structure_validation
+    description: >
+      Returns a CASE expression for email validation.
+    arguments:
+      - name: email_col
+        type: string
+        description: Column reference
+
+  - name: resume_warehouse
+    description: Resumes a suspended Snowflake warehouse.
+    arguments:
+      - name: warehouse
+        type: string
+        description: Warehouse name
+
+  - name: suspend_warehouse
+    description: Suspends a running Snowflake warehouse.
+    arguments:
+      - name: warehouse
+        type: string
+        description: Warehouse name
