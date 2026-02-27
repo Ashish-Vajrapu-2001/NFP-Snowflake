@@ -1,0 +1,81 @@
+name: 'nfp_analytics_dbt'
+version: '1.0.0'
+config-version: 2
+profile: 'nfp_analytics'
+require-dbt-version: [">=1.8.0", "<2.0.0"]
+
+model-paths: ["models"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+analysis-paths: ["analyses"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+flags:
+  send_anonymous_usage_stats: false
+  use_colors: true
+  warn_error: false
+  skip_nodes_if_on_run_start_fails: true
+  require_explicit_package_overrides_for_builtin_materializations: true
+
+query-comment:
+  comment: "nfp_analytics_dbt[[[{{ node.unique_id }}:{{ invocation_id }}]]]"
+  append: true
+
+# on-run-start:
+#   - "{{ resume_warehouse(target.warehouse) }}"
+# on-run-end:
+#   - "{{ suspend_warehouse(target.warehouse) }}"
+
+vars:
+  silver_lookback_days: 3
+  dev_num_days_to_include: 90
+  min_date: "2000-01-01"
+
+models:
+  nfp_analytics_dbt:
+    +copy_grants: true
+    +persist_docs:
+      relation: true
+      columns: true
+    staging:
+      +materialized: incremental
+      +incremental_strategy: merge
+      +on_schema_change: append_new_columns
+      +full_refresh: false
+      +database: "{{ env_var('DBT_SILVER_DB', 'NFP_SILVER') }}"
+      aims:
+        +schema: SILVER_AIMS
+        +tags: ['silver', 'aims']
+      amadeus:
+        +schema: SILVER_AMADEUS
+        +tags: ['silver', 'amadeus']
+      champ:
+        +schema: SILVER_CHAMP
+        +tags: ['silver', 'champ']
+      epicor:
+        +schema: SILVER_EPICOR
+        +tags: ['silver', 'epicor']
+      amos:
+        +schema: SILVER_AMOS
+        +tags: ['silver', 'amos']
+      ref:
+        +schema: SILVER_REF
+        +tags: ['silver', 'ref']
+
+snapshots:
+  nfp_analytics_dbt:
+    +target_database: "{{ env_var('DBT_SILVER_DB', 'NFP_SILVER') }}"
+    +target_schema: SILVER_REF
+    +strategy: timestamp
+    +updated_at: _FIVETRAN_SYNCED
+    +hard_deletes: new_record
+    +copy_grants: true
+    +tags: ['silver', 'scd2']
+
+quoting:
+  database: false
+  schema: false
+  identifier: false
