@@ -1,0 +1,49 @@
+version: 2
+models:
+  - name: stg_amadeus__ticket_coupon
+    description: "Ticket coupon revenue data"
+    columns:
+      - name: TICKET_NUMBER
+        data_tests:
+          - not_null:
+              config: {severity: error}
+      - name: TOTAL_AMOUNT
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config: {severity: error}
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ['TICKET_NUMBER', 'COUPON_NUMBER']
+          config: {severity: error}
+
+  - name: stg_amadeus__passenger_name_record
+    description: "Passenger details"
+    columns:
+      - name: PNR_LOCATOR
+        data_tests:
+          - not_null:
+              config: {severity: error}
+      - name: PASSPORT_NUMBER
+        data_tests:
+          - dbt_expectations.expect_column_values_to_match_regex:
+              arguments:
+                regex: "^[A-Z0-9]+$"
+              config: {severity: warn}
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ['PNR_LOCATOR', 'PAX_ID']
+          config: {severity: error}
+
+  - name: stg_amadeus__reservation_pnr
+    description: "Booking header"
+    columns:
+      - name: PNR_LOCATOR
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
