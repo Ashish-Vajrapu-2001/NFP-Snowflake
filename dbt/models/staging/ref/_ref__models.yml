@@ -1,0 +1,39 @@
+version: 2
+models:
+  - name: snp_ref__airport_fees
+    description: "SCD2 snapshot of airport fees"
+    columns:
+      - name: dbt_scd_id
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: AIRPORT_CODE
+        data_tests:
+          - not_null:
+              config: {severity: error}
+      - name: EFFECTIVE_DATE
+        data_tests:
+          - not_null:
+              config: {severity: error}
+      - name: LANDING_FEE
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+              config: {severity: warn}
+
+  - name: snp_ref__aircraft_cost_rate
+    description: "SCD2 snapshot of aircraft cost rates"
+    columns:
+      - name: dbt_scd_id
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: AIRCRAFT_TYPE
+        data_tests:
+          - not_null:
+              config: {severity: error}
