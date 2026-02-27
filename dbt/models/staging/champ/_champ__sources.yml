@@ -1,0 +1,28 @@
+version: 2
+sources:
+  - name: bronze_champ
+    database: "{{ env_var('DBT_BRONZE_DB', 'NFP_BRONZE') }}"
+    schema: BRONZE_CHAMP
+    config:
+      loaded_at_field: _FIVETRAN_SYNCED
+      freshness:
+        warn_after: {count: 26, period: hour}
+        error_after: {count: 30, period: hour}
+    tables:
+      - name: AIR_WAYBILL
+        description: "Cargo shipment data"
+        columns:
+          - name: AWB_NUMBER
+            description: "Air waybill number"
+          - name: FLIGHT_ID
+            description: "Foreign key to FLIGHT_LEG"
+          - name: FJD_AMOUNT
+            description: "Revenue in FJD"
+          - name: STATUS
+            description: "AWB status"
+          - name: CHARGEABLE_WEIGHT_KG
+            description: "Chargeable weight"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
