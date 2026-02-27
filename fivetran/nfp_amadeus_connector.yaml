@@ -1,0 +1,25 @@
+connector:
+  name: "nfp_amadeus_connector"
+  service: "custom"
+  config:
+    host: "{{PLACEHOLDER_AMADEUS_HOST}}"
+    port: 443
+    database: "AMADEUS"
+    user: "FIVETRAN_USER_NFP"
+    password: "{{PLACEHOLDER_SOURCE_DB_PWD}}"
+    update_method: "API_DELTA" # Log-based CDC
+  destination:
+    service: "snowflake"
+    account: "{{PLACEHOLDER_SNOWFLAKE_ACCOUNT}}"
+    database: "NFP_BRONZE"
+    schema: "BRONZE_AMADEUS"
+  sync_frequency: "15" # Minutes
+  schemas:
+    - name: "AMADEUS"
+      tables:
+        - name: "TICKET_COUPON"
+          enabled: true
+        - name: "PASSENGER_NAME_RECORD"
+          enabled: true
+        - name: "RESERVATION_PNR"
+          enabled: true
