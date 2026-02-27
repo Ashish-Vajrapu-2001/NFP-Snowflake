@@ -1,0 +1,23 @@
+connector:
+  name: "nfp_aims_connector"
+  service: "sql_server"
+  config:
+    host: "{{PLACEHOLDER_AIMS_HOST}}"
+    port: 1433
+    database: "AIMS"
+    user: "FIVETRAN_USER_NFP"
+    password: "{{PLACEHOLDER_SOURCE_DB_PWD}}"
+    update_method: "NATIVE_UPDATE" # Log-based CDC
+  destination:
+    service: "snowflake"
+    account: "{{PLACEHOLDER_SNOWFLAKE_ACCOUNT}}"
+    database: "NFP_BRONZE"
+    schema: "BRONZE_AIMS"
+  sync_frequency: "5" # Minutes
+  schemas:
+    - name: "AIMS"
+      tables:
+        - name: "FLIGHT_LEG"
+          enabled: true
+        - name: "CREW_ASSIGNMENT"
+          enabled: true
