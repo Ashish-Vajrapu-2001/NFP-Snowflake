@@ -1,0 +1,42 @@
+version: 2
+sources:
+  - name: bronze_ref
+    database: "{{ env_var('DBT_BRONZE_DB', 'NFP_BRONZE') }}"
+    schema: BRONZE_REF
+    config:
+      loaded_at_field: _FIVETRAN_SYNCED
+      freshness:
+        warn_after: {count: 26, period: hour}
+        error_after: {count: 30, period: hour}
+    tables:
+      - name: AIRPORT_FEES
+        description: "Airport fee schedule"
+        columns:
+          - name: AIRPORT_CODE
+            description: "Airport code"
+          - name: AIRCRAFT_TYPE
+            description: "Aircraft type"
+          - name: EFFECTIVE_DATE
+            description: "Effective date"
+          - name: LANDING_FEE
+            description: "Landing fee"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
+
+      - name: AIRCRAFT_COST_RATE
+        description: "Aircraft cost rates"
+        columns:
+          - name: AIRCRAFT_TYPE
+            description: "Aircraft type"
+          - name: EFFECTIVE_DATE
+            description: "Effective date"
+          - name: CREW_COST_PER_HOUR
+            description: "Crew cost per hour"
+          - name: MAINT_RESERVE_PER_HOUR
+            description: "Maintenance reserve per hour"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
