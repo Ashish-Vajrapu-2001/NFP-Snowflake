@@ -1,0 +1,26 @@
+snapshots:
+  - name: snp_ref__aircraft_cost_rate
+    relation: ref('ephemeral_snp_ref__aircraft_cost_rate')
+    config:
+      target_schema: SILVER_REF
+      unique_key: "AIRCRAFT_TYPE || '-' || TO_VARCHAR(EFFECTIVE_DATE)"
+      strategy: timestamp
+      updated_at: _FIVETRAN_SYNCED
+      hard_deletes: new_record
+      dbt_valid_to_current: "to_date('9999-12-31')"
+    description: "SCD2 snapshot of AIRCRAFT_COST_RATE"
+    columns:
+      - name: dbt_scd_id
+        description: "dbt surrogate key"
+      - name: AIRCRAFT_TYPE
+        description: "Aircraft type"
+      - name: EFFECTIVE_DATE
+        description: "Effective date"
+      - name: dbt_valid_from
+        description: "Valid from timestamp"
+      - name: dbt_valid_to
+        description: "Valid to timestamp"
+      - name: dbt_is_current
+        description: "Is current flag"
+      - name: dbt_is_deleted
+        description: "Is deleted flag"
