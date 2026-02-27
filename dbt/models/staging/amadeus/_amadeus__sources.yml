@@ -1,0 +1,70 @@
+version: 2
+sources:
+  - name: bronze_amadeus
+    database: "{{ env_var('DBT_BRONZE_DB', 'NFP_BRONZE') }}"
+    schema: BRONZE_AMADEUS
+    config:
+      loaded_at_field: _FIVETRAN_SYNCED
+      freshness:
+        warn_after: {count: 1, period: hour}
+        error_after: {count: 4, period: hour}
+    tables:
+      - name: TICKET_COUPON
+        description: "Ticket coupon revenue data"
+        columns:
+          - name: TICKET_NUMBER
+            description: "Ticket document number"
+          - name: COUPON_NUMBER
+            description: "Coupon sequence number"
+          - name: PNR_LOCATOR
+            description: "Booking reference"
+          - name: PAX_ID
+            description: "Passenger ID"
+          - name: FLIGHT_NUMBER
+            description: "Flight number"
+          - name: FLIGHT_DATE
+            description: "Flight date"
+          - name: TOTAL_AMOUNT
+            description: "Gross revenue"
+          - name: COMMISSION_AMOUNT
+            description: "Agency commission"
+          - name: TICKET_STATUS
+            description: "Coupon status"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
+
+      - name: PASSENGER_NAME_RECORD
+        description: "Passenger details"
+        columns:
+          - name: PNR_LOCATOR
+            description: "Booking reference"
+          - name: PAX_ID
+            description: "Passenger ID"
+          - name: PAX_FIRST_NAME
+            description: "First name"
+          - name: PAX_LAST_NAME
+            description: "Last name"
+          - name: PASSPORT_NUMBER
+            description: "Passport number (PII)"
+          - name: DATE_OF_BIRTH
+            description: "Date of birth"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
+
+      - name: RESERVATION_PNR
+        description: "Booking header"
+        columns:
+          - name: PNR_LOCATOR
+            description: "Unique PNR reference"
+          - name: CREATION_DATE
+            description: "Booking creation date"
+          - name: BOOKING_CHANNEL
+            description: "Booking channel"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
