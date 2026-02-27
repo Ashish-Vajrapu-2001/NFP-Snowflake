@@ -1,0 +1,26 @@
+# DO NOT COMMIT TO GIT
+nfp_analytics:
+  target: prod
+  outputs:
+    prod:
+      type: snowflake
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PASSWORD') }}"
+      role: NFP_TRANSFORMER_ROLE
+      database: NFP_SILVER
+      warehouse: NFP_TRANSFORM_WH
+      schema: SILVER_AIMS
+      threads: 4
+      client_session_keep_alive: false
+    dev:
+      type: snowflake
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PASSWORD') }}"
+      role: NFP_TRANSFORMER_ROLE
+      database: NFP_SILVER_DEV
+      warehouse: NFP_TRANSFORM_WH
+      schema: SILVER_AIMS
+      threads: 2
+      client_session_keep_alive: false
