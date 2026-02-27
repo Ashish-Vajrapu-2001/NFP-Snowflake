@@ -1,0 +1,21 @@
+version: 2
+models:
+  - name: stg_champ__air_waybill
+    description: "Cargo shipment data"
+    columns:
+      - name: AWB_NUMBER
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: CARGO_REVENUE
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config: {severity: error}
+      - name: FLIGHT_ID
+        data_tests:
+          - not_null:
+              config: {severity: warn}
