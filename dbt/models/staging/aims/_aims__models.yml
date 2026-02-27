@@ -1,0 +1,37 @@
+version: 2
+models:
+  - name: stg_aims__flight_leg
+    description: "Operational flight data from AIMS"
+    columns:
+      - name: FLIGHT_ID
+        description: "Primary key"
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: BLOCK_HOURS
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config: {severity: warn}
+      - name: FLIGHT_DATE
+        data_tests:
+          - not_null:
+              config: {severity: error}
+
+  - name: stg_aims__crew_assignment
+    description: "Crew duty assignments"
+    columns:
+      - name: ASSIGNMENT_ID
+        description: "Primary key"
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: FLIGHT_ID
+        data_tests:
+          - not_null:
+              config: {severity: error}
