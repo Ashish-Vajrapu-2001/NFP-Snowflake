@@ -1,0 +1,45 @@
+version: 2
+models:
+  - name: stg_epicor__gl_journal_entry
+    description: "General Ledger entries"
+    columns:
+      - name: JOURNAL_ID
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: FLIGHT_ID
+        data_tests:
+          - not_null:
+              config: {severity: warn}
+
+  - name: stg_epicor__fuel_invoice
+    description: "Fuel invoices"
+    columns:
+      - name: INVOICE_ID
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: FJD_AMOUNT
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+              config: {severity: error}
+      - name: FLIGHT_ID
+        data_tests:
+          - not_null:
+              config: {severity: error}
+
+  - name: stg_epicor__flight_cost_allocation
+    description: "Allocated flight costs"
+    columns:
+      - name: ALLOCATION_ID
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
