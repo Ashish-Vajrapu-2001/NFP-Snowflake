@@ -1,0 +1,33 @@
+version: 2
+models:
+  - name: stg_amos__work_order
+    description: "Maintenance work orders"
+    columns:
+      - name: WO_NUMBER
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: AIRCRAFT_REG
+        data_tests:
+          - not_null:
+              config: {severity: error}
+
+  - name: snp_amos__aircraft_fleet
+    description: "SCD2 snapshot of aircraft fleet"
+    columns:
+      - name: dbt_scd_id
+        data_tests:
+          - unique:
+              config: {severity: error}
+          - not_null:
+              config: {severity: error}
+      - name: AIRCRAFT_REG
+        data_tests:
+          - not_null:
+              config: {severity: error}
+      - name: dbt_valid_from
+        data_tests:
+          - not_null:
+              config: {severity: error}
