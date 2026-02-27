@@ -1,0 +1,62 @@
+version: 2
+sources:
+  - name: bronze_epicor
+    database: "{{ env_var('DBT_BRONZE_DB', 'NFP_BRONZE') }}"
+    schema: BRONZE_EPICOR
+    config:
+      loaded_at_field: _FIVETRAN_SYNCED
+      freshness:
+        warn_after: {count: 1, period: hour}
+        error_after: {count: 4, period: hour}
+    tables:
+      - name: GL_JOURNAL_ENTRY
+        description: "General Ledger entries"
+        columns:
+          - name: JOURNAL_ID
+            description: "Unique journal ID"
+          - name: GL_ACCOUNT_CODE
+            description: "GL Account"
+          - name: BASE_AMOUNT
+            description: "Amount in FJD"
+          - name: FLIGHT_ID
+            description: "Foreign key to FLIGHT_LEG"
+          - name: APPROVED_FLAG
+            description: "Approval status"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
+
+      - name: FUEL_INVOICE
+        description: "Fuel invoices"
+        columns:
+          - name: INVOICE_ID
+            description: "Unique invoice ID"
+          - name: FLIGHT_ID
+            description: "Foreign key to FLIGHT_LEG"
+          - name: FJD_AMOUNT
+            description: "Cost in FJD"
+          - name: QUANTITY_LITERS
+            description: "Fuel quantity"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
+
+      - name: FLIGHT_COST_ALLOCATION
+        description: "Allocated flight costs"
+        columns:
+          - name: ALLOCATION_ID
+            description: "Unique allocation ID"
+          - name: FLIGHT_ID
+            description: "Foreign key to FLIGHT_LEG"
+          - name: COST_CATEGORY
+            description: "Cost category"
+          - name: AMOUNT
+            description: "Cost amount"
+          - name: APPROVED_FLAG
+            description: "Approval status"
+          - name: _FIVETRAN_SYNCED
+            description: "Sync timestamp"
+          - name: _FIVETRAN_DELETED
+            description: "Soft delete flag"
